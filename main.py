@@ -1,24 +1,26 @@
 import pygame
+
 from core.game import Game
-from settings import *
+from settings import FPS, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE
 
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("LOST ON NEON-6")
 
-clock = pygame.time.Clock()
-game = Game(screen)
+def main() -> None:
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption(TITLE)
+    clock = pygame.time.Clock()
 
-running = True
-while running:
-    dt = clock.tick(FPS) / 1000
+    game = Game(screen)
+    while game.running:
+        dt = clock.tick(FPS) / 1000.0
+        for event in pygame.event.get():
+            game.handle_event(event)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        game.handle_event(event)
+        game.update(dt)
+        game.draw()
 
-    game.update(dt)
-    game.draw()
+    pygame.quit()
 
-pygame.quit()
+
+if __name__ == "__main__":
+    main()
